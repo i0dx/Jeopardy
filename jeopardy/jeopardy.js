@@ -1,3 +1,6 @@
+let jService = "http://jservice.io/api/";
+const sampleSize = 24;
+let test;
 // categories is the main data structure for the app; it looks like this:
 
 //  [
@@ -25,8 +28,19 @@ let categories = [];
  *
  * Returns array of category ids
  */
-
+//total of 18407 categories
 function getCategoryIds() {
+    let randOffset = Math.floor(Math.random() * (18407 - sampleSize)); //effective range 
+    let catIds = await axios.get("http://jservice.io/api/categories", {params:{
+        count: sampleSize,
+        offset: randOffset,
+    }});
+    console.log(catIds)
+    let idArray = catIds.data.map(function(val){
+        return val.id;
+    })
+    console.log(idArray);
+    return idArray;
 }
 
 /** Return object with data about a category:
@@ -53,6 +67,8 @@ function getCategory(catId) {
  */
 
 async function fillTable() {
+    let catId = getCategoryIds();
+
 }
 
 /** Handle clicking on a clue: show the question or answer.
