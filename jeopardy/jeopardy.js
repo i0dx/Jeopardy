@@ -29,17 +29,17 @@ let categories = [];
  * Returns array of category ids
  */
 //total of 18407 categories
-function getCategoryIds() {
+async function getCategoryIds() {
     let randOffset = Math.floor(Math.random() * (18407 - sampleSize)); //effective range 
-    let catIds = await axios.get("http://jservice.io/api/categories", {params:{
+    let catIds = await axios.get("http://jservice.io/api/categories", {params:{ //dynamic way fith the config and param objects
         count: sampleSize,
         offset: randOffset,
     }});
     console.log(catIds)
-    let idArray = catIds.data.map(function(val){
-        return val.id;
+    let catIdArray = catIds.data.map(function(val){ //retrieves all id's and puts them in array
+        return val.id;                              //rewrite within return?
     })
-    console.log(idArray);
+    console.log(catIdArray);
     return idArray;
 }
 
@@ -55,7 +55,13 @@ function getCategoryIds() {
  *   ]
  */
 
-function getCategory(catId) {
+async function getCategory(catId) { //receives a singular integer corresponding to the id of a category
+    let category = await axios.get(`http://jservice.io/api/category?id=${catId}`) //short way with template literals
+    console.log(category.data);
+    return {
+        title: category.data.title,
+        clues: category.data.clues,
+    }
 }
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
