@@ -1,5 +1,5 @@
 let jService = "http://jservice.io/api/";
-const sampleSize = 24;
+const sampleSize = 6;
 let test;
 // categories is the main data structure for the app; it looks like this:
 
@@ -35,12 +35,11 @@ async function getCategoryIds() {
         count: sampleSize,
         offset: randOffset,
     }});
-    console.log(catIds)
     let catIdArray = catIds.data.map(function(val){ //retrieves all id's and puts them in array
         return val.id;                              //rewrite within return?
-    })
-    console.log(catIdArray);
-    return idArray;
+    });
+
+    return catIdArray;
 }
 
 /** Return object with data about a category:
@@ -55,9 +54,9 @@ async function getCategoryIds() {
  *   ]
  */
 
-async function getCategory(catId) { //receives a singular integer corresponding to the id of a category
+async function getCategory(catId) { //accepts a singular integer corresponding to the id of a category
     let category = await axios.get(`http://jservice.io/api/category?id=${catId}`) //short way with template literals
-    console.log(category.data);
+
     return {
         title: category.data.title,
         clues: category.data.clues,
@@ -72,9 +71,12 @@ async function getCategory(catId) { //receives a singular integer corresponding 
  *   (initally, just show a "?" where the question/answer would go.)
  */
 
-async function fillTable() {
-    let catId = getCategoryIds();
+function fillTable() {
+    $("thead").empty();
 
+    categories.forEach((val, idx) => {
+        $("#game-board thead").append($(`<th class="category-${idx + 1}">${val.title}</th>`));
+    });
 }
 
 /** Handle clicking on a clue: show the question or answer.
@@ -109,12 +111,22 @@ function hideLoadingView() {
  * */
 
 async function setupAndStart() {
+    let catId = await getCategoryIds();
+    categories = catId.map(async function(val){
+        await getCategory(val);
+    });
+    
+
+    fillTable(categories);
 }
 
 /** On click of start / restart button, set up game. */
-
-// TODO
+$("#new-game").on("click", function(evt){
+    console.log("h");
+    setupAndStart();
+})
 
 /** On page load, add event handler for clicking clues */
-
-// TODO
+$("#jZone .clue-box").on("click", function(evt){
+    handleClick();
+})
