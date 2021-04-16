@@ -113,7 +113,14 @@ function hideLoadingView() {
 async function setupAndStart() {
     let catId = await getCategoryIds();
     categories = catId.map(async function(val){
-        await getCategory(val);
+        return  await getCategory(val).then(value=>{
+            console.log(value);
+            let item = value;
+            return {
+                title: value.title,
+                clues: value.clues,
+            };
+        })
     });
     
 
