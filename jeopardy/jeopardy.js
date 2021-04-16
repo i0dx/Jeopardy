@@ -71,11 +71,19 @@ async function getCategory(catId) { //accepts a singular integer corresponding t
  *   (initally, just show a "?" where the question/answer would go.)
  */
 
-function fillTable() {
+async function fillTable() {
     $("thead").empty();
-
+    $("thead").append($("<tr></tr>"))
     categories.forEach((val, idx) => {
-        $("#game-board thead").append($(`<th class="category-${idx + 1}">${val.title}</th>`));
+        $("#game-board tr").append($(`<th class="category-${idx + 1}">${val.title}</th>`));
+    });
+
+    $("tbody").empty();
+    categories.forEach((val, idx)=>{
+        $("#game-board tbody").append($(`
+            <td class ="category-${idx + 1}">${val.clues[0].question}</td>
+            <td class ="category-${idx + 1}" hidden>${val.clues[0].answer}</td>
+        `));
     });
 }
 
@@ -112,19 +120,22 @@ function hideLoadingView() {
 
 async function setupAndStart() {
     let catId = await getCategoryIds();
-    categories = catId.map(async function(val){
-        return  await getCategory(val).then(value=>{
-            console.log(value);
-            let item = value;
-            return {
-                title: value.title,
-                clues: value.clues,
-            };
-        })
-    });
+    // categories = catId.map(async function(val){
+    //     return  await getCategory(val).then(value=>{
+    //         console.log(value);
+    //         return {
+    //             title: value.title,
+    //             clues: value["clues"],
+    //         };
+    //     })
+    // });  WHY DOES THIS NOT WORK foreach also does not work????
+    categories = [];
+    for (let id of catId) {
+        categories.push(await getCategory(id));
+      }
     
 
-    fillTable(categories);
+    fillTable();
 }
 
 /** On click of start / restart button, set up game. */

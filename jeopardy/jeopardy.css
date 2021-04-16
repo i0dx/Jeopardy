@@ -23,3 +23,25 @@ div button#new-game{
   padding: 1%;
   justify-self: center;
 }
+
+#jZone{
+  padding-top: 2%;
+}
+
+table  {
+  display: table;
+  border: 1px solid black;
+  margin-left:5%;
+  margin-right: 5%;
+}
+th{
+  border: 1px solid grey;
+  margin: 10px;
+}
+thead{
+  color: white;
+  border: 1px solid grey;
+}
+tbody{
+  background-color: aquamarine;
+}
