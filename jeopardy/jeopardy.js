@@ -31,7 +31,7 @@ let categories = [];
 //total of 18407 categories
 async function getCategoryIds() {
     let randOffset = Math.floor(Math.random() * (18407 - sampleSize)); //effective range 
-    let catIds = await axios.get("http://jservice.io/api/categories", {params:{ //dynamic way fith the config and param objects
+    let catIds = await axios.get("https://jservice.io/api/categories", {params:{ //dynamic way fith the config and param objects
         count: sampleSize,
         offset: randOffset,
     }});
@@ -55,7 +55,7 @@ async function getCategoryIds() {
  */
 
 async function getCategory(catId) { //accepts a singular integer corresponding to the id of a category
-    let category = await axios.get(`http://jservice.io/api/category?id=${catId}`) //short way with template literals
+    let category = await axios.get(`https://jservice.io/api/category?id=${catId}`) //short way with template literals
     let clueArray = category.data.clues.map(val=>{
         return{
             question: val.question,
