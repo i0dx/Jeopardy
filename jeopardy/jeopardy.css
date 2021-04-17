@@ -14,15 +14,46 @@ div#billboard img{
   margin-left: auto;
   margin-right: auto;
 }
-div button#new-game{
+button{ 
+  /*CREDIT TO https://css3buttongenerator.com/ for custom button code  */
   display: block;
-  width: 290px;
-  margin-top: 2%;
   margin-left: auto;
   margin-right: auto;
-  padding: 1%;
-  justify-self: center;
+  margin-top: 2%;
+  background: #1173b0;
+  background-image: -webkit-linear-gradient(top, #1173b0, #1173b0);
+  background-image: -moz-linear-gradient(top, #1173b0, #1173b0);
+  background-image: -ms-linear-gradient(top, #1173b0, #1173b0);
+  background-image: -o-linear-gradient(top, #1173b0, #1173b0);
+  background-image: linear-gradient(to bottom, #1173b0, #1173b0);
+  -webkit-border-radius: 60;
+  -moz-border-radius: 60;
+  border-radius: 60px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  border: solid #1f628d 0px;
+  text-decoration: none;
 }
+
+button:hover {
+  background: #b2d934;
+  background-image: -webkit-linear-gradient(top, #b2d934, #1173b0);
+  background-image: -moz-linear-gradient(top, #b2d934, #1173b0);
+  background-image: -ms-linear-gradient(top, #b2d934, #1173b0);
+  background-image: -o-linear-gradient(top, #b2d934, #1173b0);
+  background-image: linear-gradient(to bottom, #b2d934, #1173b0);
+  text-decoration: none;
+}
+
+#loading{
+  display: block;
+  border-radius: 20%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 #jZone{
   padding-top: 2%;
@@ -31,12 +62,16 @@ div button#new-game{
 table  {
   display: table;
   border: 1px solid black;
-  margin-left:5%;
-  margin-right: 5%;
+  margin-left: auto;
+  margin-right: auto;
 }
 th{
   border: 1px solid grey;
   margin: 10px;
+}
+td{
+  text-align: center;
+
 }
 thead{
   color: white;
@@ -44,4 +79,8 @@ thead{
 }
 tbody{
   background-color: aquamarine;
+}
+tbody td{
+  width: 200px;
+  height: 150px;
 }

@@ -56,10 +56,17 @@ async function getCategoryIds() {
 
 async function getCategory(catId) { //accepts a singular integer corresponding to the id of a category
     let category = await axios.get(`http://jservice.io/api/category?id=${catId}`) //short way with template literals
-
+    let clueArray = category.data.clues.map(val=>{
+        return{
+            question: val.question,
+            answer: val.answer,
+            points: val.value,
+            showing: null,
+        }
+    });
     return {
         title: category.data.title,
-        clues: category.data.clues,
+        clues: clueArray,
     }
 }
 
@@ -72,19 +79,19 @@ async function getCategory(catId) { //accepts a singular integer corresponding t
  */
 
 async function fillTable() {
-    $("thead").empty();
+    showLoadingView();
     $("thead").append($("<tr></tr>"))
     categories.forEach((val, idx) => {
         $("#game-board tr").append($(`<th class="category-${idx + 1}">${val.title}</th>`));
     });
 
-    $("tbody").empty();
-    categories.forEach((val, idx)=>{
-        $("#game-board tbody").append($(`
-            <td class ="category-${idx + 1}">${val.clues[0].question}</td>
-            <td class ="category-${idx + 1}" hidden>${val.clues[0].answer}</td>
-        `));
-    });
+    for( let i = 0; i < 5; i++){ //for 5 rows
+        $("tbody").append($(`<tr class="points-${100 * (i + 1)}"></tr>`)) // adding a points class for future improvement
+        for(let z = 0; z < 6; z++){
+            $("tbody tr:last-child").append($(`
+            <td data-x="${z}" data-y="${i}">${100 *(i + 1)}</td>`)); //individual coordinate based class assginment
+        }
+    }
 }
 
 /** Handle clicking on a clue: show the question or answer.
@@ -96,6 +103,20 @@ async function fillTable() {
  * */
 
 function handleClick(evt) {
+    let $t = $(evt.target)
+    console.log(evt.target);
+    let $panel = categories[evt.target.dataset.x].clues[evt.target.dataset.y];
+    if($panel.showing === null){
+        /*alert($panel.question);
+        Show question on a window then when user clicks ok, then reveal the answer.
+        This would be a great alternative to display the question and answer in with only two cases!
+        */
+        $t.text(`${$panel.question}`);
+        $panel.showing = "question";
+    } else if($panel.showing === "question"){
+        $t.text(`${$panel.answer}`);
+        $panel.showing = "answer";
+    }
 }
 
 /** Wipe the current Jeopardy board, show the loading spinner,
@@ -103,12 +124,15 @@ function handleClick(evt) {
  */
 
 function showLoadingView() {
-
+    $("#loading").show();
+    $("thead").empty();
+    $("tbody").empty();
 }
 
 /** Remove the loading spinner and update the button used to fetch data. */
 
 function hideLoadingView() {
+    $("#loading").hide();
 }
 
 /** Start game:
@@ -130,21 +154,22 @@ async function setupAndStart() {
     //     })
     // });  WHY DOES THIS NOT WORK foreach also does not work????
     categories = [];
+    showLoadingView();
     for (let id of catId) {
         categories.push(await getCategory(id));
       }
-    
-
     fillTable();
+    hideLoadingView();
 }
 
 /** On click of start / restart button, set up game. */
 $("#new-game").on("click", function(evt){
-    console.log("h");
     setupAndStart();
 })
 
 /** On page load, add event handler for clicking clues */
-$("#jZone .clue-box").on("click", function(evt){
-    handleClick();
+$("tbody").on("click", function(evt){
+    handleClick(evt);
 })
+
+setupAndStart()
