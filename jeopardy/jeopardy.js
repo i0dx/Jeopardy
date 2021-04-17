@@ -172,4 +172,4 @@ $("tbody").on("click", function(evt){
     handleClick(evt);
 })
 
-setupAndStart()
+$().ready(setupAndStart());
